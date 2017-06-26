@@ -21,14 +21,18 @@ connection.connect(function(err) {
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
     // console.log(res);
-      console.log("Items For Sale");
-      displayItems(res);
-      firstPrompt(res);
+      start(res);
       //function to display all information about product picked
     
   });
 
 });
+
+function start(res){
+      console.log("Items For Sale");
+      displayItems(res);
+      firstPrompt(res);
+}
 
 
 function displayItems(res){
@@ -45,7 +49,7 @@ function firstPrompt(res){
       {
         type: "input",
         name: "cartID",
-        message: "ENTER ID OF DESIRED ITEM?"
+        message: "ENTER ID OF DESIRED ITEM"
       },
     ]).then(function(user){
         console.log('You have selected: ' + res[user.cartID - 1].product_name);
@@ -54,6 +58,27 @@ function firstPrompt(res){
         // console.log('user choice is ' + userChoice);
         secondPrompt(userChoice, res);
     });
+}
+
+function repeatQuestion(res){
+  inquirer.prompt([
+      {
+        type: "confirm",
+        name: "repeat",
+        message: "Would you like to purchase another item?",
+        default: true
+      }
+    ]).then(function(user){
+      if(user.repeat){
+        console.log('user picked yes');
+        // start(res);
+        firstPrompt(res);
+      }
+      else{
+        console.log('have a nice day');
+        // throw error('User terminated program');
+      }
+  });
 }
 
 function secondPrompt(input, res){
@@ -96,6 +121,8 @@ function secondPrompt(input, res){
               // console.log("Bid placed successfully!");
             }
           );
+       repeatQuestion(res);
+       
     }
   });
 }
