@@ -69,7 +69,9 @@ function repeatQuestion(res){
         default: true
       }
     ]).then(function(user){
+
       if(user.repeat){
+        // console.log(user);
         console.log('user picked yes');
         // start(res);
         firstPrompt(res);
